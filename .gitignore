@@ -1,0 +1,27 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraform.lock.hcl
+
+# Editor files
+*.swp
+*.bak
+*.tmp
+*.DS_Store
+.idea/
+.vscode/
+
+# OS files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# GitHub Actions artifacts (if any)
+*.log
