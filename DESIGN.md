@@ -26,7 +26,7 @@ For this use case — a single static HTML file — Kubernetes would be excessiv
 
 **GitHub Actions** was chosen for its tight integration with source control, simplicity, and free usage for public repositories.
 
-### Pipeline Stages:
+### Pipeline Stages
 
 1. **Checkout Code**: Retrieves the IaC configuration and index.html
 2. **Terraform Init**: Initializes the backend and providers
