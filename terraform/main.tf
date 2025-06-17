@@ -2,33 +2,39 @@ provider "aws" {
   region = var.aws_region
 }
 
-resource "aws_instance" "web" {
-  ami           = var.ami_id
-  instance_type = var.instance_type
-  key_name      = var.key_name
+resource "aws_s3_bucket" "static_site" {
+  bucket = var.bucket_name
+  acl    = "public-read"
 
-  user_data = file("user_data.sh")
-
-  vpc_security_group_ids = [aws_security_group.allow_http.id]
+  website {
+    index_document = "index.html"
+    error_document = "error.html"
+  }
 
   tags = {
-    Name = "WaracleDevOpsChallenge"
+    Name = "WaracleDevOpsChallengeStaticSite"
   }
 }
 
-resource "aws_security_group" "allow_http" {
-  name        = "allow_http"
-  description = "Allow HTTP traffic"
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+resource "aws_s3_bucket_policy" "static_site_policy" {
+  bucket = aws_s3_bucket.static_site.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Sid       = "AllowPublicRead"
+      Effect    = "Allow"
+      Principal = "*"
+      Action    = ["s3:GetObject"]
+      Resource  = ["${aws_s3_bucket.static_site.arn}/*"]
+    }]
+  })
+}
+
+resource "aws_s3_bucket_object" "index_html" {
+  bucket       = aws_s3_bucket.static_site.id
+  key          = "index.html"
+  source       = "../index.html"
+  acl          = "public-read"
+  content_type = "text/html"
 }
