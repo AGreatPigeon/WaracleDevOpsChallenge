@@ -5,7 +5,7 @@
 - **Cloud Platform:** AWS  
 - **IaC Tool:** Terraform  
 - **CI/CD Tool:** GitHub Actions  
-- **Output:** Provision an S3 bucket configured to serve a static website hosting the index.html file with public read access.
+- **Output:** Public EC2 instance serving `index.html` on port 80 via NGINX
 
 ## Structure
 
@@ -14,9 +14,10 @@
 │ └── workflows/
 │   ├── deploy.yml # GitHub Actions pipeline
 ├── terraform/
-│ ├── main.tf # AWS S3 bucket creation and static website hosting setup
-│ ├── variables.tf # Input variables for bucket name, region, etc.
-│ ├── outputs.tf # Output values (e.g., website endpoint URL)
+│ ├── main.tf # AWS resources (EC2, Security Group)
+│ ├── variables.tf # Input variables
+│ ├── outputs.tf # Output values (e.g., public IP)
+│ └── user_data.sh # EC2 bootstrap script to install NGINX
 ├── index.html # Simple webpage to be served
 ├── README.md # Project overview and pipeline explanation
 └── design.md # Infrastructure design rationale
@@ -96,11 +97,10 @@ terraform {
 
 ## Future Enhancements
 
-- Add CloudFront CDN in front of S3 for SSL and better performance
+- Add terraform fmt and validate checks
 - Include testing or monitoring hooks
 - Extend the pipeline for multi-environment workflows
-- Add automated cache invalidation on deploy
-- Support multi-file sync or upload with versioning
+- Use modules for reusable infrastructure components
 
 ## Documentation
 
@@ -109,9 +109,9 @@ terraform {
 
 ## Output
 
-After deployment, Terraform will output the bucket website URL. This can be used to verify the static page is accessible.
+After deployment, Terraform will output the EC2 instance’s public IP. This can be used to verify the static page is accessible via browser on port 80.
 
 ``` makefile
 Outputs:
-static_website_url = "http://your-bucket-name.s3-website-eu-west-1.amazonaws.com"
+instance_public_ip = "3.XX.XXX.XX"
 ```

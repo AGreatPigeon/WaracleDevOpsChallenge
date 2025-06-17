@@ -1,52 +1,37 @@
 # Design Overview – DevOps Technical Assignment
 
-## Cloud Platform Selection
+## ☁️ Chosen Cloud Platform
 
-**AWS** was chosen due to its maturity, extensive Terraform support, and widespread industry adoption.
+**AWS** was selected for its wide industry adoption, developer familiarity, and seamless Terraform support.
 
-## Infrastructure Components (Updated)
+### Infrastructure Components
 
-- **S3 Bucket** configured for static website hosting:
-  - Provides cost-effective, highly available, and scalable static content delivery.
-  - Eliminates the need for managing EC2 instances or web servers.
-- **Bucket Policy**:
-  - Configured for public read access to serve content securely.
-- **Terraform**:
-  - Maintains reproducible, modular, and declarative infrastructure.
-  - Facilitates easy future expansion (e.g., CloudFront integration, Route53 DNS).
+- **EC2 Instance** (t2.micro): Chosen for cost-efficiency and suitability for lightweight web workloads.
+- **Security Group**: Allows ingress on port 80 for HTTP traffic.
+- **User Data Script**: Installs NGINX and deploys a static HTML page at boot.
 
-## Why S3 Over EC2?
+## 🛠️ IaC Tool
 
-For hosting a single static HTML page, EC2 is overprovisioned and operationally heavier:
+**Terraform** was used to:
 
-- S3 offers a serverless, maintenance-free solution.
-- Removes patching, security group management, and bootstrapping complexity.
-- Supports direct integration with CloudFront for HTTPS and global caching.
+- Keep the infrastructure reproducible and modular
+- Ensure consistent environment setup
+- Make future automation or expansion (e.g., S3 hosting, CloudFront, Route53) trivial
 
-## CI/CD Pipeline
+### Why not Docker/Kubernetes?
 
-**GitHub Actions** was selected for:
+For this use case — a single static HTML file — Kubernetes would be excessive. It introduces overhead (cluster setup, Docker image build, service definitions) without adding meaningful value for this scope. Terraform provides a leaner, more purpose-aligned solution.
 
-- Native integration with GitHub repositories.
-- Simplified pipeline setup and free tier usage.
-- Easy extensibility for future deployment steps.
+## ⚙️ CI/CD Pipeline
+
+**GitHub Actions** was chosen for its tight integration with source control, simplicity, and free usage for public repositories.
 
 ### Pipeline Stages
 
-1. **Checkout Code:** Retrieves the Terraform configuration and website files.
-2. **Terraform Init:** Initializes the provider and backend.
-3. **Terraform Plan:** Validates and previews infrastructure changes.
-4. **Terraform Apply (Simulated):** Placeholder to mimic deployment without side effects.
-5. **Feedback:** Provides deployment status messages.
+1. **Checkout Code**: Retrieves the IaC configuration and index.html
+2. **Terraform Init**: Initializes the backend and providers
+3. **Terraform Plan**: Validates the configuration and prints expected changes
+4. **Terraform Apply (Simulated)**: Placeholder command shown, not executed
+5. **Feedback**: Final echo message indicating simulated deployment success
 
-This setup simulates a production-grade workflow and can be extended for real deployment, multi-environment workflows, and secret management.
-
-## Considerations
-
-- In production, Terraform state should be remotely managed with locking.
-- AWS credentials must never be hardcoded; use GitHub Secrets.
-- Enabling CloudFront for HTTPS and custom domains is recommended for a production-ready site.
-
----
-
-This migration from EC2 to S3 significantly simplifies infrastructure, reduces costs, and aligns with best practices for static website hosting on AWS.
+This mirrors a real-world deployment pipeline and provides a solid foundation for enhancement (e.g., test environments, S3 backend, policy validation).
