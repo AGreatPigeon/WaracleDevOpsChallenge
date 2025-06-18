@@ -1,6 +1,6 @@
 # Design Overview – DevOps Technical Assignment
 
-## ☁️ Chosen Cloud Platform
+## Chosen Cloud Platform
 
 **AWS** was selected for its wide industry adoption, developer familiarity, and seamless Terraform support.
 
@@ -10,7 +10,29 @@
 - **Security Group**: Allows ingress on port 80 for HTTP traffic.
 - **User Data Script**: Installs NGINX and deploys a static HTML page at boot.
 
-## 🛠️ IaC Tool
+## Why EC2 over S3 + CloudFront?
+
+Although S3 and CloudFront are ideal for real-world static hosting, the challenge specifically required a **basic compute instance (e.g., a VM)**. Therefore, an EC2 instance was selected as it:
+
+- Meets the literal requirement of a "compute instance"
+- Allows bootstrapping via user data scripts
+- Provides control over networking and OS-level configuration
+
+## Why Terraform?
+
+Terraform was chosen due to:
+
+- Strong support for AWS
+- Clear resource state tracking and modular design
+- Easy integration with CI/CD pipelines
+
+## Why GitHub Actions?
+
+- Native CI/CD solution that integrates tightly with GitHub
+- YAML-based workflows are readable and version-controlled
+- Simulates deployment lifecycle without deploying infrastructure
+
+## IaC Tool
 
 **Terraform** was used to:
 

@@ -2,25 +2,15 @@
 
 ## Project Overview
 
-- **Cloud Platform:** AWS  
-- **IaC Tool:** Terraform  
-- **CI/CD Tool:** GitHub Actions  
-- **Output:** Public EC2 instance serving `index.html` on port 80 via NGINX
+This project provisions a **basic compute instance** on AWS (EC2) to serve a static web page, following Infrastructure as Code (IaC) and CI/CD best practices.
 
-## Structure
+- **Cloud Provider**: AWS (eu-west-1)
+- **Compute Instance**: Amazon EC2 with Amazon Linux 2
+- **Web Server**: NGINX
+- **Automation**: Terraform + GitHub Actions
+- **CI/CD**: Simulates a deployment pipeline with `terraform init` and `terraform plan`
 
-.
-├── .github/
-│ └── workflows/
-│   ├── deploy.yml # GitHub Actions pipeline
-├── terraform/
-│ ├── main.tf # AWS resources (EC2, Security Group)
-│ ├── variables.tf # Input variables
-│ ├── outputs.tf # Output values (e.g., public IP)
-│ └── user_data.sh # EC2 bootstrap script to install NGINX
-├── index.html # Simple webpage to be served
-├── README.md # Project overview and pipeline explanation
-└── design.md # Infrastructure design rationale
+> Note: Infrastructure is provisioned but not deployed as per challenge guidelines.
 
 ## How to Use
 
@@ -34,6 +24,20 @@ terraform init
 terraform plan
 # terraform apply  # (Optional and not required)
 ```
+
+## How It Works
+
+1. **Terraform** provisions:
+   - An EC2 instance
+   - A security group allowing HTTP (port 80)
+   - Bootstrap script to install and start NGINX
+
+2. **CI/CD Pipeline** (`.github/workflows/deploy.yml`) simulates:
+   - Terraform init
+   - Terraform plan
+   - Placeholder apply (not executed)
+
+3. **Static Site** is served from the EC2 instance once provisioned.
 
 ## CI/CD Pipeline Explained
 
